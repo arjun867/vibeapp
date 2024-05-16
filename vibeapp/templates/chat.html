@@ -1,0 +1,31 @@
+{% extends 'home.html' %}
+{% block title%}
+Chat
+{% endblock %}
+{% block body %}
+<h1>Chat</h1>
+    <h2>Send a message</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send</button>
+    </form>
+    
+    <h2>Received Messages</h2>
+    <ul>
+        {% for message in received_messages %}
+            <li><strong>{{ message.sender.username }}:</strong> {{ message.content }} <em>{{ message.timestamp }}</em></li>
+        {% empty %}
+            <li>No messages received.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Sent Messages</h2>
+    <ul>
+        {% for message in sent_messages %}
+            <li><strong>To {{ message.receiver.username }}:</strong> {{ message.content }} <em>{{ message.timestamp }}</em></li>
+        {% empty %}
+            <li>No messages sent.</li>
+        {% endfor %}
+    </ul>
+{% endblock%}
