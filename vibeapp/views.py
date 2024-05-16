@@ -1,31 +1,36 @@
-from django.contrib.auth import authenticate, login,logout
-from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, MessageForm
 from .models import CustomUser, Message
-from .forms import MessageForm
+from django.http import JsonResponse
 
 @login_required
 def view_profile(request):
     return render(request, 'view_profile.html', {'user': request.user})
 
 @login_required
-def chat(request):
+def chat_with_user(request, user_id):
+    other_user = get_object_or_404(CustomUser, id=user_id)
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
             message = form.save(commit=False)
             message.sender = request.user
+            message.receiver = other_user
             message.save()
-            return redirect('chat')  # Redirect to the chat page
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'Message sent'})
+            return redirect('chat_with_user', user_id=user_id)
     else:
         form = MessageForm()
-    received_messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
-    sent_messages = Message.objects.filter(sender=request.user).order_by('-timestamp')
+    received_messages = Message.objects.filter(receiver=request.user, sender=other_user).order_by('-timestamp')
+    sent_messages = Message.objects.filter(sender=request.user, receiver=other_user).order_by('-timestamp')
     return render(request, 'chat.html', {
         'form': form,
         'received_messages': received_messages,
         'sent_messages': sent_messages,
+        'other_user': other_user
     })
 
 def register(request):
@@ -53,4 +58,5 @@ def logout_view(request):
     return redirect('home')
 
 def home(request):
-    return render(request,'home.html')
+    users = CustomUser.objects.all()
+    return render(request, 'home.html', {'users': users})

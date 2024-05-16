@@ -1,31 +1,48 @@
 {% extends 'home.html' %}
-{% block title%}
+{% block title %}
 Chat
 {% endblock %}
 {% block body %}
-<h1>Chat</h1>
-    <h2>Send a message</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Send</button>
-    </form>
-    
-    <h2>Received Messages</h2>
-    <ul>
-        {% for message in received_messages %}
-            <li><strong>{{ message.sender.username }}:</strong> {{ message.content }} <em>{{ message.timestamp }}</em></li>
-        {% empty %}
-            <li>No messages received.</li>
-        {% endfor %}
-    </ul>
+<h1>Chat with {{ other_user.username }}</h1>
+<h2>Send a message to {{ other_user.username }}</h2>
+<form id="chat-form" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
 
-    <h2>Sent Messages</h2>
-    <ul>
-        {% for message in sent_messages %}
-            <li><strong>To {{ message.receiver.username }}:</strong> {{ message.content }} <em>{{ message.timestamp }}</em></li>
-        {% empty %}
-            <li>No messages sent.</li>
-        {% endfor %}
-    </ul>
-{% endblock%}
+<h2>Received Messages</h2>
+<ul id="received-messages">
+    {% for message in received_messages %}
+        <li><strong>{{ message.sender.username }}:</strong> {{ message.content }} <em>{{ message.timestamp }}</em></li>
+    {% empty %}
+        <li>No messages received.</li>
+    {% endfor %}
+</ul>
+
+<h2>Sent Messages</h2>
+<ul id="sent-messages">
+    {% for message in sent_messages %}
+        <li><strong>To {{ message.receiver.username }}:</strong> {{ message.content }} <em>{{ message.timestamp }}</em></li>
+    {% empty %}
+        <li>No messages sent.</li>
+    {% endfor %}
+</ul>
+
+<script>
+    $(document).ready(function() {
+        $('#chat-form').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#chat-form')[0].reset();
+                    $('#received-messages').prepend('<li><strong>{{ user.username }}:</strong> ' + response.message + ' <em>Just now</em></li>');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% block body %}
+<h1>Chat with User {{ chat_user_id }}</h1>
+<div id="chat-messages">
+    {% for message in received_messages %}
+    <div class="message received">
+        <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+        <span class="timestamp">{{ message.timestamp }}</span>
+    </div>
+    {% endfor %}
+    {% for message in sent_messages %}
+    <div class="message sent">
+        <p><strong>You:</strong> {{ message.content }}</p>
+        <span class="timestamp">{{ message.timestamp }}</span>
+    </div>
+    {% endfor %}
+</div>
+<form method="post" id="message-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
+{% endblock %}

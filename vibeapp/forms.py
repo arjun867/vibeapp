@@ -14,7 +14,4 @@ class CustomUserCreationForm(UserCreationForm):
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['receiver', 'content']
-        widgets = {
-            'content': forms.Textarea(attrs={'rows': 4, 'cols': 40}),
-        }
+        fields = ['content']
