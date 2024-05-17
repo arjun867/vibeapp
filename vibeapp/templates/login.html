@@ -1,14 +1,33 @@
 {% extends 'home.html' %}
 {% block title %}
-login
-{% endblock%}
+Login
+{% endblock %}
+
 {% block body %}
-  <h2>Login</h2>
-  <h5>new user to VIBE?,<a href="{% url 'register' %}">register here</a></h5>
-  <form method="post">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Username"><br>
-    <input type="password" name="password" placeholder="Password"><br>
-    <button type="submit">Login</button>
-  </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Login</h2>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-center">New user to VIBE? <a href="{% url 'register' %}">Register here</a></h5>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mt-3">
+                            <input type="text" name="username" class="form-control" placeholder="Username">
+                        </div>
+                        <div class="form-group mt-3">
+                            <input type="password" name="password" class="form-control" placeholder="Password">
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

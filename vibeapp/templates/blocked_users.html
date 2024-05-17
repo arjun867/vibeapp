@@ -1,11 +1,29 @@
 {% extends "home.html" %}
 
-{% block title %} blocked users {% endblock%}
+{% block title %}
+Blocked Users
+{% endblock %}
+
 {% block body %}
-  <h2>Blocked Users</h2>
-  <ul>
-    {% for blocked_user in blocked_users %}
-      <li>{{ blocked_user.blocked.id }} <a href="{% url 'unblock_user' blocked_user.blocked.id %}">Unblock</a></li>
-    {% endfor %}
-  </ul>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Blocked Users</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for blocked_user in blocked_users %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            User ID: {{ blocked_user.blocked.id }}
+                            <a href="{% url 'unblock_user' blocked_user.blocked.id %}" class="btn btn-danger btn-sm">Unblock</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,43 +1,55 @@
-<!-- chat.html -->
 {% extends 'home.html' %}
 {% block title %}
 Chat
 {% endblock %}
 {% block body %}
-<div class="container">
-    <a href="{% url 'blocked_users_list' %}">Blocked Users</a>
-    <h1>Chat</h1>
-    <div class="chat-container">
-        <div class="messages">
-            <h2>Messages</h2>
-            <ul>
-                {% include 'messages_partial.html' %}
-            </ul>
-        </div>
-        <div class="send-message">
-            <h2>Send a message</h2>
-            <form id="message-form" method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" name="send_message" class="btn btn-primary">Send</button>
-            </form>
-        </div>
-        <div class="vibe-actions">
-            {% if not show_profile %}
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="vibe_action" value="vibe_match" class="btn btn-success">Vibe Match</button>
-                <button type="submit" name="vibe_action" value="vibe_not_match" class="btn btn-danger">Vibe Not Match</button>
-            </form>
-            {% else %}
-            <p>{{receiver.username}}</p>
-            {% endif %}
-        </div>
-        <div class="block-user">
-            <form method="post" action="{% url 'block_user' receiver_id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-warning">Block User</button>
-            </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>Chat</h1>
+                </div>
+                <div class="card-body">
+                    <div class="chat-container">
+                        <div class="messages">
+                            <h2 class="text-center">Messages</h2>
+                            <ul class="list-group">
+                                {% include 'messages_partial.html' %}
+                            </ul>
+                        </div>
+                        <div class="send-message mt-4">
+                            <h2 class="text-center">Send a Message</h2>
+                            <form id="message-form" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {{ form.as_p }}
+                                </div>
+                                <div class="text-center mt-3">
+                                    <button type="submit" name="send_message" class="btn btn-primary">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="vibe-actions text-center mt-4">
+                            {% if not show_profile %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <button type="submit" name="vibe_action" value="vibe_match" class="btn btn-success">Vibe Match</button>
+                                <button type="submit" name="vibe_action" value="vibe_not_match" class="btn btn-danger">Vibe Not Match</button>
+                            </form>
+                            {% else %}
+                            <p class="mt-3">{{ receiver.username }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="block-user text-center mt-4">
+                            <form method="post" action="{% url 'block_user' receiver_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-warning">Block User</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -8,11 +8,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <title>
-        {% block title %}
-        home
-        {% endblock %}
-    </title>
+    <title>{% block title %}home{% endblock %}</title>
+    <style>
+        .navbar-brand h1 {
+            font-size: 1.5rem;
+        }
+        .nav-link h5 {
+            margin: 0;
+        }
+        .intromsg p, .intrologin h1 {
+            text-align: center;
+        }
+        .intromsg a {
+            color: #0d6efd;
+            text-decoration: underline;
+        }
+        .intromsg a:hover {
+            text-decoration: none;
+        }
+        .table {
+            margin: 20px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+        .btn-primary, .btn-secondary {
+            margin: 10px 0;
+            display: block;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -50,19 +74,46 @@
         </div>
     </div>
     {% block body %}
-
-    <a href="{% url 'suggest_user' %}" class="btn btn-secondary">Suggest User to Chat</a>
-    <a href="{% url 'recent_chats' %}" class="btn btn-secondary">Recent Chats</a>
-    
-    <h1>User IDs</h1>
-    <table>
-        {% for user_id in user_ids %}
-        <tr>
-            <td>{{ user_id }}</td>
-            <td><a href="{% url 'chat_with_user' user_id %}" class="btn btn-primary">Chat</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+    {% if user.is_authenticated %}
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <a href="{% url 'suggest_user' %}" class="btn btn-primary">Suggest User to Chat</a>
+            </div>
+            <div class="col-md-12">
+                <a href="{% url 'recent_chats' %}" class="btn btn-secondary">Recent Chats</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 intrologin">
+                <h1>User IDs</h1>
+                <table class="table table-striped">
+                    {% for user_id in user_ids %}
+                    <tr>
+                        <td>{{ user_id }}</td>
+                        <td><a href="{% url 'chat_with_user' user_id %}" class="btn btn-primary">Chat</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12 intromsg">
+                <p>
+                    This VIBE webapp allows you to chat with other users without revealing your identity.
+                    If the person you're chatting with likes your VIBE, you can see their details. If they
+                    dislike your VIBE, you can't chat with them again unless you unblock them. You also
+                    have the ability to block users you're chatting with. Enjoy all these cool features;
+                    just <a href="{% url 'register' %}">register</a> for a new VIBE account. If you have already registered, 
+                    then <a href="{% url 'login' %}">login</a> to your VIBE account.
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="{% static 'script.js' %}"></script>

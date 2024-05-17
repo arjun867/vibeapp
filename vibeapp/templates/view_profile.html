@@ -1,18 +1,30 @@
 {% extends 'home.html' %}
+
 {% block title %}
 Profile
-{% endblock%}
+{% endblock %}
+
 {% block body %}
-
-<h1>{{ user.username }}'s Profile</h1>
-<p>Email: {{ user.email }}</p>
-<p>Gender: {{ user.get_gender_display }}</p>
-<p>Date of Birth: {{ user.date_of_birth }}</p>
-<p>Class 10 School: {{ user.class_10_school }}</p>
-<p>Class 10 Passing Year: {{ user.class_10_passing_year }}</p>
-<p>Class 12 School: {{ user.class_12_school }}</p>
-<p>Class 12 Passing Year: {{ user.class_12_passing_year }}</p>
-<p>College Name: {{ user.college_name }}</p>
-<p>Expected Graduation Year: {{ user.expected_graduation_year }}</p>
-
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>{{ user.username }}'s Profile</h1>
+                </div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Gender:</strong> {{ user.get_gender_display }}</p>
+                    <p><strong>Date of Birth:</strong> {{ user.date_of_birth }}</p>
+                    <p><strong>Class 10 School:</strong> {{ user.class_10_school }}</p>
+                    <p><strong>Class 10 Passing Year:</strong> {{ user.class_10_passing_year }}</p>
+                    <p><strong>Class 12 School:</strong> {{ user.class_12_school }}</p>
+                    <p><strong>Class 12 Passing Year:</strong> {{ user.class_12_passing_year }}</p>
+                    <p><strong>College Name:</strong> {{ user.college_name }}</p>
+                    <p><strong>Expected Graduation Year:</strong> {{ user.expected_graduation_year }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

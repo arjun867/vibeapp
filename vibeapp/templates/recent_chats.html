@@ -2,15 +2,35 @@
 {% block title %}
 Recent Chats
 {% endblock %}
+
 {% block body %}
-<div class="container">
-    <h1>Recent Chats</h1>
-    <ul>
-        {% for user in recent_chatted_users %}
-        <li>
-            <a href="{% url 'chat_with_user' user.id %}">{{ user.id }}</a>
-        </li>
-        {% endfor %}
-    </ul>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h1>Recent Chats</h1>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-center">User ID</th>
+                                <th scope="col" class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in recent_chatted_users %}
+                            <tr>
+                                <td class="text-center">{{ user.id }}</td>
+                                <td class="text-center"><a href="{% url 'chat_with_user' user.id %}" class="btn btn-primary">Chat</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
