@@ -34,6 +34,10 @@ class CustomUser(AbstractUser):
         related_query_name="user",
     )
 
+class BlockedUser(models.Model):
+    blocker = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='blocker')
+    blocked = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='blocked')
+    blocked_at = models.DateTimeField(auto_now_add=True)
 
 class Message(models.Model):
     sender = models.ForeignKey(CustomUser, related_name='sent_messages', on_delete=models.CASCADE)

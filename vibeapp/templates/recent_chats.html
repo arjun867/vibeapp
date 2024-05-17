@@ -1,0 +1,16 @@
+{% extends 'home.html' %}
+{% block title %}
+Recent Chats
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h1>Recent Chats</h1>
+    <ul>
+        {% for user in recent_chatted_users %}
+        <li>
+            <a href="{% url 'chat_with_user' user.id %}">{{ user.username }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -8,7 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <title>{% block title %}Home{% endblock %}</title>
+    <title>
+        {% block title %}
+        home
+        {% endblock %}
+    </title>
 </head>
 <body>
     <div class="container-fluid">
@@ -43,12 +47,16 @@
         </div>
     </div>
     {% block body %}
+
+    <a href="{% url 'suggest_user' %}" class="btn btn-secondary">Suggest User to Chat</a>
+    <a href="{% url 'recent_chats' %}" class="btn btn-secondary">Recent Chats</a>
+    
     <h1>User IDs</h1>
     <table>
-        {% for user in users %}
+        {% for user_id in user_ids %}
         <tr>
-            <td>{{ user.id }}</td>
-            <td><a href="{% url 'chat_with_user' user.id %}" class="btn btn-primary">Chat</a></td>
+            <td>{{ user_id }}</td>
+            <td><a href="{% url 'chat_with_user' user_id %}" class="btn btn-primary">Chat</a></td>
         </tr>
         {% endfor %}
     </table>
