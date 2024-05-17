@@ -35,6 +35,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'view_profile' %}"><h5>Profile</h5></a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'blocked_users_list' %}"><h5>Blocked Users</h5></a>
+                            </li>
                             {% else %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}"><h5>Login</h5></a>

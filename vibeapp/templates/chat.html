@@ -4,6 +4,7 @@ Chat
 {% endblock %}
 {% block body %}
 <div class="container">
+    <a href="{% url 'blocked_users_list' %}">Blocked Users</a>
     <h1>Chat</h1>
     <div class="chat-container">
         <div class="messages">
@@ -24,13 +25,20 @@ Chat
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" name="send_message" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+        <div class="vibe-actions">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="vibe_action" value="vibe_match" class="btn btn-success">Vibe Match</button>
+                <button type="submit" name="vibe_action" value="vibe_not_match" class="btn btn-danger">Vibe Not Match</button>
             </form>
         </div>
         <div class="block-user">
             <form method="post" action="{% url 'block_user' receiver_id %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Block User</button>
+                <button type="submit" class="btn btn-warning">Block User</button>
             </form>
         </div>
     </div>

@@ -47,3 +47,10 @@ class Message(models.Model):
 
     def __str__(self):
         return f'{self.sender.username} to {self.receiver.username}: {self.content[:20]}'
+    
+class VibeMatch(models.Model):
+    user1 = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='vibe_match_user1')
+    user2 = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='vibe_match_user2')
+    user1_vibe = models.BooleanField(default=False)
+    user2_vibe = models.BooleanField(default=False)
+    matched = models.BooleanField(default=False)

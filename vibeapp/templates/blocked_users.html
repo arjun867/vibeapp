@@ -1,0 +1,11 @@
+{% extends "home.html" %}
+
+{% block title %} blocked users {% endblock%}
+{% block body %}
+  <h2>Blocked Users</h2>
+  <ul>
+    {% for blocked_user in blocked_users %}
+      <li>{{ blocked_user.blocked.id }} <a href="{% url 'unblock_user' blocked_user.blocked.id %}">Unblock</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
