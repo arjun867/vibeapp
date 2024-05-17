@@ -29,12 +29,16 @@ Chat
             </form>
         </div>
         <div class="vibe-actions">
-            <form method="post">
+            {% if not show_profile %}
+              <form method="post">
                 {% csrf_token %}
                 <button type="submit" name="vibe_action" value="vibe_match" class="btn btn-success">Vibe Match</button>
                 <button type="submit" name="vibe_action" value="vibe_not_match" class="btn btn-danger">Vibe Not Match</button>
-            </form>
-        </div>
+              </form>
+            {% else %}
+              <a href="{% url 'view_profile' receiver.id %}">View Profile</a>
+            {% endif %}
+          </div>
         <div class="block-user">
             <form method="post" action="{% url 'block_user' receiver_id %}">
                 {% csrf_token %}

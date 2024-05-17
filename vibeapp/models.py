@@ -54,3 +54,10 @@ class VibeMatch(models.Model):
     user1_vibe = models.BooleanField(default=False)
     user2_vibe = models.BooleanField(default=False)
     matched = models.BooleanField(default=False)
+    
+    def check_match(self):
+        if self.user1_vibe and self.user2_vibe:
+            self.matched = True
+        else:
+            self.matched = False
+        self.save()

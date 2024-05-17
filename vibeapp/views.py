@@ -57,6 +57,12 @@ def chat_with_user(request, user_id):
     if BlockedUser.objects.filter(Q(blocker=request.user, blocked=receiver) | Q(blocker=receiver, blocked=request.user)).exists():
         return redirect('home')
 
+    # Get or create the VibeMatch instance
+    vibe_match, created = VibeMatch.objects.get_or_create(
+        user1=min(request.user, receiver, key=lambda u: u.id),
+        user2=max(request.user, receiver, key=lambda u: u.id)
+    )
+
     # Get messages
     messages = Message.objects.filter(
         (Q(sender=request.user) & Q(receiver=receiver)) |
@@ -78,30 +84,32 @@ def chat_with_user(request, user_id):
     # Handle vibe match submission
     if request.method == 'POST' and 'vibe_action' in request.POST:
         action = request.POST.get('vibe_action')
-        vibe_match, created = VibeMatch.objects.get_or_create(user1=request.user, user2=receiver, defaults={'user1_vibe': action == 'vibe_match'})
+        vibe_match, created = VibeMatch.objects.get_or_create(
+            user1=min(request.user, receiver, key=lambda u: u.id), 
+            user2=max(request.user, receiver, key=lambda u: u.id)
+        )
         
-        if not created:
-            if vibe_match.user1 == request.user:
-                vibe_match.user1_vibe = action == 'vibe_match'
-            else:
-                vibe_match.user2_vibe = action == 'vibe_match'
-        
-        if vibe_match.user1_vibe and vibe_match.user2_vibe:
-            vibe_match.matched = True
+        if vibe_match.user1 == request.user:
+            vibe_match.user1_vibe = action == 'vibe_match'
         else:
-            if action == 'vibe_not_match':
-                BlockedUser.objects.get_or_create(blocker=request.user, blocked=receiver)
+            vibe_match.user2_vibe = action == 'vibe_match'
         
-        vibe_match.save()
-        return redirect('chat_with_user', user_id=user_id)
+        vibe_match.check_match()
+        
+        if action == 'vibe_not_match':
+            BlockedUser.objects.get_or_create(blocker=request.user, blocked=receiver)
+            return redirect('home')
 
     return render(request, 'chat.html', {
         'receiver': receiver,
         'messages': messages,
         'form': form,
         'user': request.user,
-        'receiver_id': user_id
+        'receiver_id': user_id,
+        'vibe_match': vibe_match,
+        'show_profile': vibe_match.matched
     })
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
