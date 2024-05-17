@@ -1,3 +1,4 @@
+<!-- chat.html -->
 {% extends 'home.html' %}
 {% block title %}
 Chat
@@ -10,19 +11,12 @@ Chat
         <div class="messages">
             <h2>Messages</h2>
             <ul>
-                {% for message in messages %}
-                <li class="{% if message.sender == user %}sent{% else %}received{% endif %}">
-                    <div class="message-content">
-                        <strong>{% if message.sender == user %}To {{ message.receiver.username }}{% else %}{{ message.sender.username }}{% endif %}:</strong> {{ message.content }}
-                        <em>{{ message.timestamp }}</em>
-                    </div>
-                </li>
-                {% endfor %}
+                {% include 'messages_partial.html' %}
             </ul>
         </div>
         <div class="send-message">
             <h2>Send a message</h2>
-            <form method="post">
+            <form id="message-form" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit" name="send_message" class="btn btn-primary">Send</button>
@@ -30,15 +24,15 @@ Chat
         </div>
         <div class="vibe-actions">
             {% if not show_profile %}
-              <form method="post">
+            <form method="post">
                 {% csrf_token %}
                 <button type="submit" name="vibe_action" value="vibe_match" class="btn btn-success">Vibe Match</button>
                 <button type="submit" name="vibe_action" value="vibe_not_match" class="btn btn-danger">Vibe Not Match</button>
-              </form>
+            </form>
             {% else %}
-              <p>{{receiver.username}}</p>
+            <p>{{receiver.username}}</p>
             {% endif %}
-          </div>
+        </div>
         <div class="block-user">
             <form method="post" action="{% url 'block_user' receiver_id %}">
                 {% csrf_token %}

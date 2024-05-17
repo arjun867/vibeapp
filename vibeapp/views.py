@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, MessageForm
 from .models import CustomUser, Message,BlockedUser,VibeMatch
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 import random
 from django.db.models import Q
 
@@ -53,52 +54,38 @@ def block_user(request, user_id):
 def chat_with_user(request, user_id):
     receiver = get_object_or_404(CustomUser, pk=user_id)
 
-    # Check if the receiver has blocked the user or the user has blocked the receiver
     if BlockedUser.objects.filter(Q(blocker=request.user, blocked=receiver) | Q(blocker=receiver, blocked=request.user)).exists():
         return redirect('home')
 
-    # Get or create the VibeMatch instance
     vibe_match, created = VibeMatch.objects.get_or_create(
         user1=min(request.user, receiver, key=lambda u: u.id),
         user2=max(request.user, receiver, key=lambda u: u.id)
     )
 
-    # Get messages
     messages = Message.objects.filter(
         (Q(sender=request.user) & Q(receiver=receiver)) |
         (Q(sender=receiver) & Q(receiver=request.user))
     ).order_by('timestamp')
 
-    # Handle message form submission
-    if request.method == 'POST' and 'send_message' in request.POST:
+    if request.method == 'POST' and 'content' in request.POST:
         form = MessageForm(request.POST)
         if form.is_valid():
             message = form.save(commit=False)
             message.sender = request.user
             message.receiver = receiver
             message.save()
+
+            messages_html = render_to_string('messages_partial.html', {'messages': messages, 'user': request.user})
+
+            if request.is_ajax():
+                return JsonResponse({'messages_html': messages_html})
+
             return redirect('chat_with_user', user_id=user_id)
+    elif 'fetch_new' in request.GET:
+        messages_html = render_to_string('messages_partial.html', {'messages': messages, 'user': request.user})
+        return JsonResponse({'messages_html': messages_html})
     else:
         form = MessageForm()
-
-    # Handle vibe match submission
-    if request.method == 'POST' and 'vibe_action' in request.POST:
-        action = request.POST.get('vibe_action')
-        vibe_match, created = VibeMatch.objects.get_or_create(
-            user1=min(request.user, receiver, key=lambda u: u.id), 
-            user2=max(request.user, receiver, key=lambda u: u.id)
-        )
-        
-        if vibe_match.user1 == request.user:
-            vibe_match.user1_vibe = action == 'vibe_match'
-        else:
-            vibe_match.user2_vibe = action == 'vibe_match'
-        
-        vibe_match.check_match()
-        
-        if action == 'vibe_not_match':
-            BlockedUser.objects.get_or_create(blocker=request.user, blocked=receiver)
-            return redirect('home')
 
     return render(request, 'chat.html', {
         'receiver': receiver,

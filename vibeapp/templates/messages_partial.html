@@ -1,0 +1,9 @@
+<!-- messages_partial.html -->
+{% for message in messages %}
+<li class="{% if message.sender == user %}sent{% else %}received{% endif %}">
+    <div class="message-content">
+        <strong>{% if message.sender == user %}To {{ message.receiver.username }}{% else %}{{ message.sender.username }}{% endif %}:</strong> {{ message.content }}
+        <em>{{ message.timestamp }}</em>
+    </div>
+</li>
+{% endfor %}
