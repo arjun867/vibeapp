@@ -36,7 +36,7 @@ Chat
                 <button type="submit" name="vibe_action" value="vibe_not_match" class="btn btn-danger">Vibe Not Match</button>
               </form>
             {% else %}
-              <a href="{% url 'view_profile' receiver.id %}">View Profile</a>
+              <p>{{receiver.username}}</p>
             {% endif %}
           </div>
         <div class="block-user">
