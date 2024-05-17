@@ -20,12 +20,12 @@ Chat
                         </div>
                         <div class="send-message mt-4">
                             <h2 class="text-center">Send a Message</h2>
-                            <form id="message-form" method="post">
+                            <form id="message-form" method="post" class="d-flex">
                                 {% csrf_token %}
-                                <div class="form-group">
-                                    {{ form.as_p }}
+                                <div class="flex-grow-1">
+                                    {{ form.content }}
                                 </div>
-                                <div class="text-center mt-3">
+                                <div class="ms-2">
                                     <button type="submit" name="send_message" class="btn btn-primary">Send</button>
                                 </div>
                             </form>
