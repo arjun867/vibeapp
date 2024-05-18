@@ -61,24 +61,24 @@ def chat_with_user(request, user_id):
         user1=min(request.user, receiver, key=lambda u: u.id),
         user2=max(request.user, receiver, key=lambda u: u.id)
     )
+
     if request.method == 'POST' and 'vibe_action' in request.POST:
         action = request.POST.get('vibe_action')
         vibe_match, created = VibeMatch.objects.get_or_create(
-            user1=min(request.user, receiver, key=lambda u: u.id), 
+            user1=min(request.user, receiver, key=lambda u: u.id),
             user2=max(request.user, receiver, key=lambda u: u.id)
         )
-        
+
         if vibe_match.user1 == request.user:
             vibe_match.user1_vibe = action == 'vibe_match'
         else:
             vibe_match.user2_vibe = action == 'vibe_match'
-        
+
         vibe_match.check_match()
-        
+
         if action == 'vibe_not_match':
             BlockedUser.objects.get_or_create(blocker=request.user, blocked=receiver)
             return redirect('home')
-
 
     messages = Message.objects.filter(
         (Q(sender=request.user) & Q(receiver=receiver)) |
@@ -95,11 +95,11 @@ def chat_with_user(request, user_id):
 
             messages_html = render_to_string('messages_partial.html', {'messages': messages, 'user': request.user})
 
-            if request.is_ajax():
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'messages_html': messages_html})
 
             return redirect('chat_with_user', user_id=user_id)
-    elif 'fetch_new' in request.GET:
+    elif request.method == 'GET' and 'fetch_new' in request.GET:
         messages_html = render_to_string('messages_partial.html', {'messages': messages, 'user': request.user})
         return JsonResponse({'messages_html': messages_html})
     else:
