@@ -143,3 +143,9 @@ def home(request):
     users = CustomUser.objects.exclude(id=request.user.id)
     user_ids = [user.id for user in users]
     return render(request, 'home.html', {'user_ids': user_ids})
+
+def help(request):
+    return render(request,'help.html')
+
+def about(request):
+    return render(request,'about.html')

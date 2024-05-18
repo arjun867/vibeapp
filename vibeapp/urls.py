@@ -14,4 +14,7 @@ urlpatterns = [
     path('blocked_users/', views.blocked_users_list, name='blocked_users_list'),
     path('suggest_user/', views.suggest_user, name='suggest_user'),
     path('recent_chats/', views.recent_chats, name='recent_chats'),
+    path('help/', views.help, name='help'),
+    path('about/', views.about, name='about'),
+    
 ]

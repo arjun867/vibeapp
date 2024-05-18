@@ -1,0 +1,45 @@
+{% extends 'home.html' %}
+{% block title %} Help {% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div>
+            <h3>Help</h3>
+            <h4>Add to Home Screen</h4>
+            <p>
+                We suggest you add this web app to your mobile home screen for easy access. Follow these steps:
+                <ul>
+                    <li>Open our app in Chrome.</li>
+                    <li>Click on the three dots at the top right corner of Chrome.</li>
+                    <li>Select the 'Add to Home screen' option.</li>
+                    <li>Click 'Add'.</li>
+                    <li>You have successfully added the web app to your home screen.</li>
+                </ul>
+            </p>
+            
+            <h4>Find Friends</h4>
+            <p>
+                VIBE allows you to find new friends and chat with them without initially revealing your identity. If both you and the person you're chatting with select the "VIBE Matching" option, your profiles will be visible to each other. If you select the "VIBE Not Matching" option, the other user will be blocked.
+            </p>
+            
+            <h4>Chatting with Friends</h4>
+            <p>
+                You can chat with other users without revealing your identity. To get a suggestion for a random person to chat with, click on the "Suggest User to Chat" button. You can view your recent chats by clicking on the "Recent Chats" button, and you can also select whom to chat with from the list of users in the app.
+            </p>
+            
+            <h4>Blocking and Unblocking Users</h4>
+            <p>
+                If you encounter any misbehavior, you can block the user to stop chatting with them. You also have the option to unblock a user by checking the blocked list in the app and clicking the "Unblock" option next to the user's name.
+            </p>
+            
+            <br>
+            <p>
+                All these features are available for free. Simply <a href="{% url 'register' %}">register</a> to our app. We always welcome your valuable <a href="mailto:sammengiarjun@gmail.com">feedback</a>, as we believe that feedback from friendly users can help us improve the product. We hope you will use our app regularly and make new friends who match your vibe.
+            </p>
+            <p>
+                This is the first version of our app, and we are committed to consistently improving it.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
